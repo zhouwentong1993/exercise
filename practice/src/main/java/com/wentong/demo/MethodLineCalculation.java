@@ -11,9 +11,7 @@ import java.io.FileReader;
 public class MethodLineCalculation {
 
     private boolean startAnnotation = false;
-    private boolean endAnnotation = false;
     private boolean startMethod = false;
-    private boolean endMethod = false;
     private int lineNumber = 0;
 
     public static void main(String[] args) throws Exception{
