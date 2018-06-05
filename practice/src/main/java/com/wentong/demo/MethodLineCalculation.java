@@ -14,6 +14,8 @@ public class MethodLineCalculation {
     private boolean startMethod = false;
     private int lineNumber = 0;
 
+    private final String[] MODIFIER = {"private","public","protected"};
+
     public static void main(String[] args) throws Exception{
         File file = new File("/Users/zhouwentong/Desktop/ConcurrencyTest.java");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
@@ -24,14 +26,47 @@ public class MethodLineCalculation {
         }
     }
 
-    private boolean isAnnotationStart(String line) {
+    private void annotationStart(String line) {
+        if (startMethod) {
+            return;
+        }
         String trimLine = line.trim();
         boolean start = trimLine.startsWith("/*") && !trimLine.endsWith("*/");
-
-        return start;
+        if (start) {
+            startAnnotation = true;
+            startMethod = false;
+        }
     }
 
-//    private boolean
+    private void methodStart(String line) {
+        if (startAnnotation) {
+            return;
+        }
+        String trimLine = line.trim();
+        if (trimLine.endsWith("{")) {
+            String trimLine2 = trimLine.substring(trimLine.length() - 1).trim();
+            if (trimLine2.endsWith(")")) {
+                if (trimLine2.contains(",")) {
+                    startMethod = true;
+                    startAnnotation = false;
+                } else {
+                    String trimLine3 = trimLine2.substring(trimLine2.indexOf('(') + 1, trimLine2.length() - 1).trim();
+                    if (trimLine3.contains("<") && trimLine3.contains(">")) {
+                        String substring = trimLine3.substring(trimLine3.indexOf('<') + 1, trimLine3.indexOf('>'));
+                        if (!(substring.contains("&") || substring.contains("|"))) {
+                            trimLine3 = trimLine3.replace("<", "").replace(">", "").replace(substring, "");
+                        }
+                    }
+                    String[] split = trimLine3.split(" ");
+                    if (split.length == 2) {
+                        startMethod = true;
+                        startAnnotation = false;
+                    }
+                }
+            }
+
+        }
+    }
 
     private boolean isSingleLineAnnotation(String line) {
         String trimLine = line.trim();
