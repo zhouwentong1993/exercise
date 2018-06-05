@@ -10,9 +10,9 @@ import java.io.FileReader;
  */
 public class MethodLineCalculation {
 
-    private boolean startAnnotation = false;
-    private boolean startMethod = false;
-    private int lineNumber = 0;
+    private static boolean startAnnotation = false;
+    private static boolean startMethod = false;
+    private static int lineNumber = 0;
 
     private final String[] MODIFIER = {"private","public","protected"};
 
@@ -21,12 +21,25 @@ public class MethodLineCalculation {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-
+                dealAnnotation(line);
+                dealMethod(line);
+                if (startMethod) {
+                    System.out.println("haha");
+                    lineNumber ++;
+                } else {
+                    System.out.println(lineNumber);
+                    lineNumber = 0;
+                }
             }
         }
     }
 
-    private void annotationStart(String line) {
+    public static void dealAnnotation(String line) {
+        annotationStart(line);
+        annotationEnd(line);
+    }
+
+    private static void annotationStart(String line) {
         if (startMethod) {
             return;
         }
@@ -36,9 +49,10 @@ public class MethodLineCalculation {
             startAnnotation = true;
             startMethod = false;
         }
+
     }
 
-    private void methodStart(String line) {
+    private static void dealMethod(String line) {
         if (startAnnotation) {
             return;
         }
@@ -93,9 +107,16 @@ public class MethodLineCalculation {
         return "";
     }
 
-    private boolean isAnnotationEnd(String line) {
+    private static void annotationEnd(String line) {
+        if (startMethod || !startAnnotation) {
+            return ;
+        }
         String trimLine = line.trim();
-        return !trimLine.startsWith("/*") && trimLine.endsWith("*/");
+        boolean annotationEnd = !trimLine.startsWith("/*") && trimLine.endsWith("*/");
+        if (annotationEnd) {
+            startAnnotation = false;
+            startMethod = false;
+        }
     }
 
     private boolean isMethodStart(String line) {
