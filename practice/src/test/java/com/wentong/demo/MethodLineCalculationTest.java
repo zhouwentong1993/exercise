@@ -37,6 +37,19 @@ public class MethodLineCalculationTest {
         System.out.println(methodStart(line2));
         System.out.println(methodStart(line3));
         System.out.println(methodStart(line4));
+        String trimLine = " public ArrayList() {";
+        String trimLine2 = trimLine.substring(trimLine.length() - 1).trim();
+        System.out.println(trimLine2);
+    }
+
+    @Test
+    public void testString() {
+        String s = "    public static void main(){}";
+        String[] split = s.split("");
+        for (String s1 : split) {
+            System.out.println(s1);
+        }
+        System.out.println(split);
     }
 
     private boolean methodStart(String line) {
