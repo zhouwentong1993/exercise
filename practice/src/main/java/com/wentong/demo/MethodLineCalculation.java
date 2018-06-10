@@ -3,9 +3,8 @@ package com.wentong.demo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Created by zhouwentong on 2018/5/27.
@@ -20,22 +19,47 @@ public class MethodLineCalculation {
     private static final List<String> LEFT_BRACKETS = Arrays.asList("{");
     private static final List<String> RIGHT_BRACKETS = Arrays.asList("}");
 
+    private static List<MethodCalculation> list = new ArrayList<>();
+    private static MethodCalculation methodCalculation = null;
+
+    private static String methodName;
+    private static String modifier;
+
 
     public static void main(String[] args) throws Exception {
         File file = new File("/Users/zhouwentong/Desktop/ConcurrencyTest.java");
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                lineNumber ++;
+                lineNumber++;
                 dealAnnotation(line);
                 dealMethod(line);
                 if (startMethod) {
-                    System.out.println(lineNumber);
+                    if (methodCalculation == null) {
+                        methodCalculation = new MethodCalculation();
+                        list.add(methodCalculation);
+                    }
+                    methodCalculation.setTotalLine(methodCalculation.getTotalLine() + 1);
+                    methodCalculation.setMethodName(methodName);
+                    methodCalculation.setModifier(modifier);
                 } else {
-                    System.out.println();
+                    methodCalculation = null;
+                    methodName = null;
+                    modifier = null;
                 }
             }
         }
+        System.out.println(list);
+        int totalMethodLines = 0;
+        int totalMethods = 0;
+        for (MethodCalculation calculation : list) {
+            totalMethodLines = totalMethodLines + calculation.getTotalLine();
+            totalMethods++;
+        }
+
+        list.sort(Comparator.comparingInt(MethodCalculation::getTotalLine).reversed());
+        System.out.println("平均每个方法行数：" + BigDecimal.valueOf(totalMethodLines).divide(BigDecimal.valueOf(totalMethods), 2));
+        System.out.println("行数最多的方法是：" + list.get(0).getMethodName());
     }
 
     public static void dealAnnotation(String line) {
@@ -62,7 +86,6 @@ public class MethodLineCalculation {
         }
         if (startMethod) {
             if (stack.empty()) {
-                System.out.println();
                 startMethod = false;
                 return;
             }
@@ -77,12 +100,10 @@ public class MethodLineCalculation {
         } else {
             String trimLine = line.trim();
             if (trimLine.endsWith("{")) {
-//                    public ArrayList() {
                 String trimLine2 = trimLine.substring(0, trimLine.length() - 1).trim();
                 if (trimLine2.endsWith(")")) {
                     if (trimLine2.contains(",")) {
-                        startMethod = true;
-                        startAnnotation = false;
+                        startMethod(trimLine);
                     } else {
                         String trimLine3 = trimLine2.substring(trimLine2.indexOf('(') + 1, trimLine2.length() - 1).trim();
                         if (trimLine3.contains("<") && trimLine3.contains(">")) {
@@ -93,13 +114,36 @@ public class MethodLineCalculation {
                         }
                         String[] split = trimLine3.split(" ");
                         if (split.length == 2) {
-                            startMethod = true;
-                            stack.push("{");
-                            startAnnotation = false;
+                            startMethod(trimLine3);
                         }
                     }
                 }
 
+            }
+        }
+    }
+
+    private static void startMethod(String trimLine) {
+        if (trimLine.contains("int offset, int fromIndex, int toIndex")) {
+            return;
+        }
+        startMethod = true;
+        startAnnotation = false;
+        stack.push("{");
+        String[] split = trimLine.split(" ");
+        modifier = split[0];
+        System.out.println(trimLine);
+        if (split.length == 2) {
+            methodName = split[1];
+        } else {
+            String substring = trimLine.substring(0, trimLine.indexOf("("));
+            String[] split1 = substring.split(" ");
+            if (split1.length == 1) {
+                methodName = split1[0];
+                modifier = "friendly";
+            } else {
+                modifier = split1[0];
+                methodName = split1[2];
             }
         }
     }

@@ -78,4 +78,15 @@ public class MethodLineCalculationTest {
         return false;
     }
 
+    @Test
+    public void testString1() {
+        String s = "private void grow(int minCapacity) {";
+        String[] split = s.split(" ");
+        System.out.println(split[0]);
+        System.out.println(split[2].substring(0,split[2].lastIndexOf("(")));
+        String s1 = "SubList(AbstractList<E> parent,";
+        String substring = s1.substring(0, s1.indexOf("("));
+        System.out.println(substring);
+    }
+
 }
