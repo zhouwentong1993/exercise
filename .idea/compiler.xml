@@ -8,14 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="concurrency" />
         <module name="practice" />
-        <module name="redisdemo" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="concurrency" target="1.5" />
-      <module name="exercise" target="1.5" />
-      <module name="practice" target="1.5" />
-      <module name="redisdemo" target="1.6" />
+    <bytecodeTargetLevel target="9">
+      <module name="concurrency" target="9" />
+      <module name="exercise" target="9" />
+      <module name="practice" target="9" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
