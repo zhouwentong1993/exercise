@@ -11,6 +11,7 @@
     <modules>
         <module>concurrency</module>
         <module>practice</module>
+        <module>redisdemo</module>
     </modules>
 
 
