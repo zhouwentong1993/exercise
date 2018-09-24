@@ -7,17 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="concurrency" />
-        <module name="nettypractice" />
         <module name="practice" />
-        <module name="redisdemo" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="9">
       <module name="concurrency" target="1.8" />
       <module name="exercise" target="1.8" />
-      <module name="nettypractice" target="1.8" />
       <module name="practice" target="1.8" />
-      <module name="redisdemo" target="1.6" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
