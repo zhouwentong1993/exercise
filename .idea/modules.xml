@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/concurrency/concurrency.iml" filepath="$PROJECT_DIR$/concurrency/concurrency.iml" />
       <module fileurl="file://$PROJECT_DIR$/exercise.iml" filepath="$PROJECT_DIR$/exercise.iml" />
+      <module fileurl="file://$PROJECT_DIR$/netty-practice/nettypractice.iml" filepath="$PROJECT_DIR$/netty-practice/nettypractice.iml" />
       <module fileurl="file://$PROJECT_DIR$/practice/practice.iml" filepath="$PROJECT_DIR$/practice/practice.iml" />
       <module fileurl="file://$PROJECT_DIR$/redisdemo/redisdemo.iml" filepath="$PROJECT_DIR$/redisdemo/redisdemo.iml" />
     </modules>

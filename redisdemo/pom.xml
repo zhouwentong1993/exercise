@@ -26,7 +26,8 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>1.5.2.RELEASE</version>
         </dependency>
     </dependencies>
 
